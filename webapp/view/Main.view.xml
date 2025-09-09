@@ -1,0 +1,121 @@
+<mvc:View controllerName="com.syswise.wm.mbsp.insertsputaway.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:table="sap.ui.table"
+    xmlns:rowmodes="sap.ui.table.rowmodes">
+    <Page 
+        id="page" 
+        title="{i18n>title}"
+        showHeader="{device>/system/phone}" >
+
+        <form:SimpleForm
+            class="ZZ_MBSP_CompactForm"
+            editable="true"
+            layout="ResponsiveGridLayout"
+            labelSpanS="4">
+
+            <form:content>
+
+                <!-- >>> INITIAL INFO - PLANT + STORAGE LOCATION -->
+                <Label
+                    text="{/#C_PlantvaluehelpType/Plant/@sap:label}"
+                />
+                <Text 
+                    id="Plant_Text"
+                    text="{= !!${Plant} ? ${PlantName} + ' (' + ${Plant} + ')' : '' }" />
+
+                <Label
+                    text="{/#I_StorageLocationType/StorageLocation/@sap:label}"
+                />
+                <Text 
+                    id="StorageLocation_Text"
+                    text="{= !!${StorageLocation} ? ${StorageLocationName} + ' (' + ${StorageLocation} + ')' : '' }" />
+                <!-- >>> INITIAL INFO - PLANT + STORAGE LOCATION -->
+
+                <!-- >>> SCANNED BARCODES TABLE -->
+                <Label text="{i18n>th_scanned_barcodes}" />
+                <table:Table
+                    rows="{prompt_data>/ScannedBarcodes}"
+                    enableColumnReordering="false"
+                    enableSelectAll="false"
+                    selectionMode="None"
+                    class="ZZ_MBSP_SUItemsTable"
+                    columnHeaderHeight="10"
+                >
+                    <table:columns>
+                        <table:Column
+                            resizable="false"
+                            autoResizable="true"
+                        >
+                            <table:template>
+                                <Text text="{prompt_data>BARCODE}" />
+                            </table:template>
+                        </table:Column>
+                    </table:columns>
+                    <table:rowMode>
+                        <rowmodes:Auto
+                            minRowCount="{= 
+                                ${prompt_data>/ScannedBarcodes}.length &lt; 6 ? 
+                                ${prompt_data>/ScannedBarcodes}.length : 
+                                5 
+                            }"
+                            rowContentHeight="20"
+                        />
+                    </table:rowMode>
+                </table:Table>
+                <!-- >>> SCANNED BARCODES TABLE -->
+
+                <!-- >>> BARCODE + STORAGE BIN INPUT -->
+                <Label
+                    text="{/#ZDD_C_WM_MBSP_INSPTWType/barcode/@sap:label}"
+                />
+                <Input
+                    id="Barcode_Input"
+                    value="{prompt_data>/Barcode}"
+                    change="onBarcodeChange"
+                />
+                <Label
+                    text="{/#ZDD_C_WM_MBSP_INSPTWType/storage_bin/@sap:label}"
+                    required="true"
+                />
+                <Input
+                    id="StorageBin_Input"
+                    value="{prompt_data>/StorageBin}"
+                    change="onStorageBinChange"
+                    maxLength="10"
+                />
+                <!-- >>> BARCODE + STORAGE BIN INPUT -->
+
+            </form:content>
+        </form:SimpleForm>
+
+        <VBox
+            width="100%"
+            height="15vh"
+            alignItems="Center"
+            justifyContent="Center">     
+            <Button
+                class="ZZ_MBSP_MainActionButton"
+                width="100vw"
+                text="{i18n>btn_clear} [F1]"
+                icon="sap-icon://sys-cancel-2"
+                type="Reject"
+                press="onPressClear"
+            />
+            <Button
+                class="ZZ_MBSP_MainActionButton"
+                width="100vw"
+                text="{i18n>btn_post} [F3]"
+                icon="sap-icon://accounting-document-verification"
+                type="Accept"
+                enabled="{= 
+                    !!${prompt_data>/StorageBin}
+                    &amp;&amp;
+                    ( !!${prompt_data>/ScannedBarcodes} &amp;&amp; ${prompt_data>/ScannedBarcodes}.length > 0 )                                                     
+                }"
+                press="onPressPost"
+            />  
+        </VBox> 
+    </Page>
+</mvc:View>

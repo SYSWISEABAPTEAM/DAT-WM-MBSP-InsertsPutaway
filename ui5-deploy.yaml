@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.6"
+metadata:
+  name: com.syswise.wm.mbsp.insertsputaway
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        ignoreCertError: true
+        target:
+          url: https://10.169.27.150:44300/
+          client: "100"
+        app:
+          name: ZUI5_WM_MBSP_I2
+          description: "WM: Mobile Service App Inserts Putaway"
+          package: ZWM_FIORI_MOBILE_SERVICE_PACK
+          transport: SFDK904076
+        exclude:
+          - /test/
