@@ -81,7 +81,7 @@ sap.ui.define([
 
                         break;
 
-                }
+                }   
             },
 
             onBarcodeChange: async function (oEvent) {
@@ -109,7 +109,7 @@ sap.ui.define([
                                 StorageLocation: this._sStorageLocation,
                                 StorageBin: sStorageBin,
                                 ScannedBarcodes: JSON.stringify(oScannedBarcodes),
-                                Barcode: sBarcode
+                                barcode: sBarcode
                             },
                             success: function (oData, oResponse) {
                                 oDeferred.resolve(oData.act_scan_barcode);
